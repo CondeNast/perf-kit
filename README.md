@@ -7,6 +7,56 @@ What resulted was this library that leverages the V8 profiler to collect metrics
 - If a proposed change to the codebase impacted performance significantly
 - What, in particular, are performance bottlenecks for a piece of code
 
+## Profiling code
+
+Install perf-kit into the repository that you want to add profiles to:
+
+```bash
+npm install --save-dev @condenast/perf-kit
+```
+
+After it's been installed, run:
+
+```bash
+./node_modules/.bin/perf-kit init
+```
+
+This will add a folder for performance profiles (`performance`) to your repository that can be run. (It will automatically create a JavaScript or TypeScript file according to whether you have `typescript` installed as a package in your `package.json`).
+
+The file will look something like:
+
+```ts
+import { profile, suite } from "@condenast/perf-kit";
+
+let testSuites = [
+  suite({
+    name: "my-first-profiler",
+    cases: [],
+    runner: test => {
+      // Run your code here
+    }
+  })
+];
+
+async function run() {
+  for (let suite of suites) {
+    await profile<any>(suite, {
+      runs: 10,
+      baseline: "baseline"
+    });
+  }
+}
+
+run().then(
+  () => {
+    process.exit();
+  },
+  err => {
+    throw Error(err);
+  }
+);
+```
+
 ## Generating performance profiles
 
 Performance test suites are defined in `performance/index.ts` and specify a number of test cases to be run by a `runner` function. Within a test suite, a test run will generate a .cpuprofile of the test runner acting on all of the test cases in a random order. To run the test suites, run `npm run perf` which by default will run each test suite 10 times and store the .cpuprofile files in `performance/profiles/{test suite name}/current`. It will additionally aggregate over the test runs to generate a `timing.json` file in the same directory. The timing file will have distribution data for the sample and cumulative times for each function sampled in the test runs. For now, only functions defined in packages in this repo are included in the tiing file.
