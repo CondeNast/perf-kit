@@ -1,0 +1,28 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "baseUrl": "./",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "paths": {
+      "parse5": ["./node_modules/@types/parse5/index.d.ts"]
+    },
+    "removeComments": true,
+    "jsx": "react",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES6"
+  },
+  "exclude": ["node_modules", "dist", "public", "test"]
+}

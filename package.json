@@ -1,0 +1,33 @@
+{
+  "name": "perf-kit",
+  "version": "0.1.0",
+  "description": "Perf kit is a toolchain for testing performance regressions in JavaScript code.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CondeNast/perf-kit.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/CondeNast/perf-kit/issues"
+  },
+  "homepage": "https://github.com/CondeNast/perf-kit#readme",
+  "devDependencies": {
+    "@types/ink": "2.0.3",
+    "@types/ink-table": "1.0.1",
+    "@types/node": "13.7.4",
+    "@types/react": "16.9.22",
+    "typescript": "3.8.2"
+  },
+  "dependencies": {
+    "ink": "2.7.1",
+    "ink-table": "2.0.1",
+    "react": "16.12.0",
+    "simple-statistics": "7.0.8",
+    "ttest": "2.1.1"
+  }
+}
