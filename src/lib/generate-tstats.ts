@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
 import { join } from "path";
-import * as ttest from "ttest";
+const ttest = require("ttest");
 import { FunctionTiming, ProfileStat, TimingStat } from "./generate-timing";
 
 export type TStat = {
@@ -133,13 +133,11 @@ export function generateTStats(
         let profileStat = JSON.parse(
           readFileSync(join(testDir, current, "timing.json")).toString()
         ) as ProfileStat;
-        let profileTStat = getTStats(beforeProfileStat, profileStat);
-        let filename = `${baseline}-${current}-tStats.json`;
-        writeFileSync(
-          join(testDir, current, filename),
-          JSON.stringify(profileTStat)
-        );
-        resolve({ filename, profileTStat });
+
+        resolve({
+          filename: `${baseline}-${current}-tStats.json`,
+          profileTStat: getTStats(beforeProfileStat, profileStat)
+        });
       } catch (error) {
         reject(error);
       }

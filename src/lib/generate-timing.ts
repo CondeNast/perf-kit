@@ -42,13 +42,6 @@ export type ProfileStat = {
   functions: FunctionTiming[];
 };
 
-function shouldIncludeInSummary(node: TimedFunction) {
-  return (
-    node.functionName === "(garbage collector)" ||
-    node.url.match(/packages\/@atjson/)
-  );
-}
-
 function toKey(functionInfo: { url: string; functionName: string }) {
   return `${functionInfo.url}, ${functionInfo.functionName}`;
 }
@@ -57,21 +50,19 @@ function createTimedFunction(functionInfo: {
   url: string;
   functionName: string;
 }) {
-  let relativeIndex = functionInfo.url.indexOf("/packages/");
-  let relativeUrl =
-    relativeIndex > -1
-      ? functionInfo.url.slice(relativeIndex)
-      : functionInfo.url;
   return {
     functionName: functionInfo.functionName || "(anonymous)",
-    url: relativeUrl,
+    url: functionInfo.url,
     callCount: 0,
     sampleTime: 0,
     cumulativeTime: 0
   };
 }
 
-function timeProfile(profile: inspector.Profiler.Profile): TimedProfile {
+function getAggregateTimingByFunctionCall(
+  profile: inspector.Profiler.Profile,
+  filter: (node: TimedFunction) => boolean
+): TimedProfile {
   let nodeMap = profile.nodes.reduce(
     (map, node) => map.set(node.id, { ...node, sampleTime: 0 }),
     new Map<number, TimedNode>()
@@ -109,7 +100,9 @@ function timeProfile(profile: inspector.Profiler.Profile): TimedProfile {
   return {
     cumulativeTime,
     functions: [...timedFunctions.values()]
-      .filter(shouldIncludeInSummary)
+      .filter(
+        node => node.functionName === "(garbage collector)" || filter(node)
+      )
       .sort((n1, n2) => n1.cumulativeTime - n2.cumulativeTime)
   };
 }
@@ -179,7 +172,10 @@ function summarizeProfiles(timedProfiles: TimedProfile[]): ProfileStat {
   };
 }
 
-export function generateTiming(directory: string) {
+export function generateTiming(
+  directory: string,
+  filter: (node: TimedFunction) => boolean
+) {
   return new Promise((resolve, reject) => {
     try {
       let files = readdirSync(directory);
@@ -189,7 +185,7 @@ export function generateTiming(directory: string) {
           let profile = JSON.parse(
             readFileSync(join(directory, filename)).toString()
           ) as inspector.Profiler.Profile;
-          return timeProfile(profile);
+          return getAggregateTimingByFunctionCall(profile, filter);
         });
       let profileStat = summarizeProfiles(timedProfiles);
       writeFileSync(join(directory, TIMING_FILE), JSON.stringify(profileStat));

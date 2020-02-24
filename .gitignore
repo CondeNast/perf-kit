@@ -6,3 +6,4 @@ tmp
 .*.swp
 .cache
 .DS_Store
+tsconfig.tsbuildinfo

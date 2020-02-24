@@ -48,8 +48,10 @@ npx ts-node ./perf-kit profile --times=10
 ```
 
 **Options**
+
 - `times`— The number of times to run each code block.
 - `out`— The name of the directory to store the profiles. This can be a full path or a relative path
+- `verbose`— Output progress information during the running of the command.
 
 This will generate `cpuprofile`s for the whole performance suite.
 
