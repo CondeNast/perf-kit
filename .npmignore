@@ -4,6 +4,7 @@
 dist/**/test
 dist/**/node_modules
 src
+example
 public
 test
 tmp
