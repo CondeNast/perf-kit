@@ -1,0 +1,2 @@
+profile [--times] [--verbose] [--out]
+  Runs profiles against the the performance suite
