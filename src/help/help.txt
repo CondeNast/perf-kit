@@ -1,0 +1,7 @@
+Available commands:
+
+compare [baseline] [target] [--verbose]
+  Compares two profile runs against each other
+
+profile [--times] [--verbose] [--out]
+  Runs profiles against the the performance suite

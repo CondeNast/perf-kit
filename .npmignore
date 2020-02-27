@@ -1,10 +1,13 @@
 .cache
+.gitignore
 .vscode
 dist/**/test
 dist/**/node_modules
 src
+example
 public
 test
 tmp
 .npmrc
 tsconfig.json
+tsconfig.tsbuildinfo

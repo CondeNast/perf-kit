@@ -3,7 +3,7 @@
   "compilerOptions": {
     "alwaysStrict": true,
     "baseUrl": "./",
-    "composite": true,
+    "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
     "downlevelIteration": true,
@@ -15,14 +15,12 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "paths": {
-      "parse5": ["./node_modules/@types/parse5/index.d.ts"]
-    },
+    "rootDir": "./src",
     "removeComments": true,
-    "jsx": "react",
     "skipLibCheck": true,
     "strict": true,
     "target": "ES6"
   },
-  "exclude": ["node_modules", "dist", "public", "test"]
+  "exclude": ["node_modules", "dist", "public", "example"],
+  "include": ["src/**/*"]
 }
