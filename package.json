@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/CondeNast/perf-kit#readme",
   "devDependencies": {
-    "@types/minimist": "^1.2.0",
+    "@types/minimist": "1.2.0",
     "@types/node": "13.7.4",
     "typescript": "3.8.2"
   },
