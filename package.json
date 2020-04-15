@@ -22,7 +22,7 @@
   "devDependencies": {
     "@types/minimist": "1.2.0",
     "@types/node": "13.7.4",
-    "typescript": "3.8.2"
+    "typescript": "3.8.3"
   },
   "dependencies": {
     "minimist": "^1.2.0",
