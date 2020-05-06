@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "minimist": "^1.2.0",
-    "simple-statistics": "7.0.8",
+    "simple-statistics": "7.1.0",
     "ttest": "2.1.1"
   }
 }
