@@ -7,7 +7,11 @@ import { generateTiming, TimedFunction } from "../lib/generate-timing";
 import { shuffle } from "./shuffle";
 import { enable, disable, run } from "./node-profiler";
 
-function writeProfile(directory: string, profile: any, id: string) {
+function writeProfile(
+  directory: string,
+  profile: ReturnType<typeof JSON.parse>,
+  id: string
+) {
   if (profile) {
     writeFileSync(join(directory, `${id}.cpuprofile`), JSON.stringify(profile));
   }
@@ -27,7 +31,7 @@ export function generateCPUProfile<T>(
   let session = new inspector.Session();
   return enable(session)
     .then(() => run(session, cases, runner))
-    .then(profile => writeProfile(directory, profile, id))
+    .then((profile) => writeProfile(directory, profile, id))
     .finally(() => disable(session));
 }
 

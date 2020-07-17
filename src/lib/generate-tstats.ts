@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { join } from "path";
-const ttest = require("ttest");
+import ttest from "ttest";
 import { FunctionTiming, ProfileStat, TimingStat } from "./generate-timing";
 
 export type TStat = {
@@ -41,18 +41,14 @@ function hasMeaningfulDifference({ confidenceInterval }: TStat) {
   return (min < 0 && max < 0) || (0 < min && max < 0);
 }
 
-function getTStat(
-  stat1: TimingStat,
-  stat2: TimingStat,
-  alpha: number = 0.05
-): TStat {
+function getTStat(stat1: TimingStat, stat2: TimingStat, alpha = 0.05): TStat {
   let ttestStats = ttest(stat2.data, stat1.data, { alpha });
   return {
     confidenceInterval: ttestStats.confidence(),
     tScore: ttestStats.testValue(),
     pValue: ttestStats.pValue(),
     degreesFreedom: ttestStats.freedom(),
-    alpha
+    alpha,
   };
 }
 
@@ -67,7 +63,7 @@ function getTStats(
   let functionMap = new Map<string, [FunctionTiming?, FunctionTiming?]>();
   [profileStat1.functions, profileStat2.functions].forEach(
     (functionTimings, index) => {
-      functionTimings.forEach(functionTiming => {
+      functionTimings.forEach((functionTiming) => {
         let key = toKey(functionTiming);
         let entry = functionMap.get(key);
         if (!entry) {
@@ -84,11 +80,11 @@ function getTStats(
   let dropped: FunctionTiming[] = [];
   let added: FunctionTiming[] = [];
   functionMap.forEach(([functionTiming1, functionTiming2]) => {
-    if (!functionTiming1) {
-      added.push(functionTiming2!);
-    } else if (!functionTiming2) {
-      dropped.push(functionTiming1!);
-    } else {
+    if (!functionTiming1 && functionTiming2) {
+      added.push(functionTiming2);
+    } else if (!functionTiming2 && functionTiming1) {
+      dropped.push(functionTiming1);
+    } else if (functionTiming1 && functionTiming2) {
       try {
         let tStat = getTStat(
           functionTiming1.cumulativeTime,
@@ -100,10 +96,11 @@ function getTStats(
             url: functionTiming1.url,
             before: functionTiming1,
             after: functionTiming2,
-            cumulativeTimeTStat: tStat
+            cumulativeTimeTStat: tStat,
           });
         }
-      } catch {}
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
     }
   });
 
@@ -115,7 +112,7 @@ function getTStats(
     ),
     functionTStats,
     dropped,
-    added
+    added,
   };
 }
 
@@ -136,7 +133,7 @@ export function generateTStats(
 
         resolve({
           filename: `${baseline}-${current}-tStats.json`,
-          profileTStat: getTStats(beforeProfileStat, profileStat)
+          profileTStat: getTStats(beforeProfileStat, profileStat),
         });
       } catch (error) {
         reject(error);

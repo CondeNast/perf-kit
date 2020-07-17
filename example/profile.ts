@@ -4,6 +4,6 @@ run({
   name: "test-suite",
   cases: ["one", "two", "three"],
   runner(testCase) {
-    typeof testCase === "string"
-  }
+    typeof testCase === "string";
+  },
 });

@@ -3,7 +3,7 @@ import * as inspector from "inspector";
 export function enable(session: inspector.Session): Promise<void> {
   return new Promise((resolve, reject) => {
     session.connect();
-    session.post("Profiler.enable", err => {
+    session.post("Profiler.enable", (err) => {
       if (err) reject(err);
       else resolve();
     });
@@ -12,7 +12,7 @@ export function enable(session: inspector.Session): Promise<void> {
 
 export function disable(session: inspector.Session): Promise<void> {
   return new Promise((resolve, reject) => {
-    session.post("Profiler.disable", err => {
+    session.post("Profiler.disable", (err) => {
       if (err) reject(err);
       else {
         session.disconnect();
@@ -22,13 +22,13 @@ export function disable(session: inspector.Session): Promise<void> {
   });
 }
 
-export function run(
+export function run<T>(
   session: inspector.Session,
-  cases: any[],
-  runner: (testCase: any) => void
+  cases: T[],
+  runner: (testCase: T) => void
 ): Promise<inspector.Profiler.Profile | undefined> {
   return new Promise((resolve, reject) => {
-    session.post("Profiler.start", err => {
+    session.post("Profiler.start", (err) => {
       if (err) {
         reject(err);
       } else {

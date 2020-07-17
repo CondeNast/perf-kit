@@ -1,6 +1,6 @@
 import { levenshteinDistance } from "../lib/levenshtein-distance";
 
-export default function(command: string) {
+export default function (command: string) {
   let argv = [];
 
   // This script was run using npx
