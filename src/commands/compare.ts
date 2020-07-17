@@ -1,9 +1,9 @@
 import { writeFileSync } from "fs";
-import * as minimist from "minimist";
+import minimist from "minimist";
 import { join } from "path";
 import { generateTStats } from "../lib/generate-tstats";
 
-export default async function<T>(
+export default async function <T>(
   argv: string[],
   testSuites: Array<{
     name: string;
@@ -13,8 +13,8 @@ export default async function<T>(
 ) {
   let args = minimist(argv, {
     alias: { v: "verbose" },
-    boolean: ["verbose"]
-  }) as { _: any[]; verbose: boolean; out: string };
+    boolean: ["verbose"],
+  }) as { _: string[]; verbose: boolean; out: string };
 
   let [baseline, current] = args._;
   let directory = join(process.cwd(), "perf-kit", "profiles");

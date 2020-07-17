@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readdirSync, unlinkSync } from "fs";
-import * as minimist from "minimist";
+import minimist from "minimist";
 import { join } from "path";
 import { profile } from "../lib/profile";
 
@@ -24,7 +24,7 @@ function prepareDir(name: string, baseline: string) {
   }
 }
 
-export default async function<T>(
+export default async function <T>(
   argv: string[],
   testSuites: Array<{
     name: string;
@@ -35,9 +35,9 @@ export default async function<T>(
   let args = minimist(argv, {
     alias: { v: "verbose" },
     boolean: ["verbose"],
-    default: { verbose: false, times: 10, out: "baseline" }
+    default: { verbose: false, times: 10, out: "baseline" },
   }) as {
-    _: any[];
+    _: unknown[];
     verbose: boolean;
     times: string;
     out: string;
@@ -56,14 +56,14 @@ export default async function<T>(
       verbose: args.verbose,
       runs: Number(args.times),
       out: args.out,
-      filter: node => {
+      filter: (node) => {
         if (args.target) {
           return node.url.indexOf(args.target) !== -1;
         } else {
           return node.url.indexOf("node_modules") === -1;
         }
       },
-      directory
+      directory,
     });
   }
 }

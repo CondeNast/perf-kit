@@ -55,8 +55,16 @@ function createTimedFunction(functionInfo: {
     url: functionInfo.url,
     callCount: 0,
     sampleTime: 0,
-    cumulativeTime: 0
+    cumulativeTime: 0,
   };
+}
+
+function getNode<K, V>(nodeMap: Map<K, V>, item: K): V | never {
+  let node = nodeMap.get(item);
+  if (node) {
+    return node;
+  }
+  throw new Error(`${item} is not in map`);
 }
 
 function getAggregateTimingByFunctionCall(
@@ -71,14 +79,14 @@ function getAggregateTimingByFunctionCall(
   let cumulativeTime = 0;
   if (profile.samples && profile.timeDeltas) {
     profile.samples.forEach((id, index) => {
-      let timeDelta = profile.timeDeltas![index];
-      nodeMap.get(id)!.sampleTime += timeDelta;
+      let timeDelta = (profile.timeDeltas ?? [])[index];
+      getNode(nodeMap, id).sampleTime += timeDelta;
       cumulativeTime += timeDelta;
     });
   }
 
   let timedFunctions = new Map<string, TimedFunction>();
-  nodeMap.forEach(node => {
+  nodeMap.forEach((node) => {
     let key = toKey(node.callFrame);
     let timedFunction = timedFunctions.get(key);
     if (!timedFunction) {
@@ -88,7 +96,7 @@ function getAggregateTimingByFunctionCall(
 
     let childTime = node.children
       ? node.children.reduce(
-          (sum, childId) => sum + nodeMap.get(childId)!.sampleTime,
+          (sum, childId) => sum + getNode(nodeMap, childId).sampleTime,
           0
         )
       : 0;
@@ -101,9 +109,9 @@ function getAggregateTimingByFunctionCall(
     cumulativeTime,
     functions: [...timedFunctions.values()]
       .filter(
-        node => node.functionName === "(garbage collector)" || filter(node)
+        (node) => node.functionName === "(garbage collector)" || filter(node)
       )
-      .sort((n1, n2) => n1.cumulativeTime - n2.cumulativeTime)
+      .sort((n1, n2) => n1.cumulativeTime - n2.cumulativeTime),
   };
 }
 
@@ -119,7 +127,7 @@ function calculateStats(timing: TimingStat) {
       stats.quantile(data, 0.25),
       stats.median(data),
       stats.quantile(data, 0.75),
-      stats.max(data)
+      stats.max(data),
     ];
     timing.mean = stats.mean(data);
     timing.sd = stats.standardDeviation(data);
@@ -135,7 +143,7 @@ function createFunctionStat(functionInfo: {
     url: functionInfo.url,
     callCount: [],
     sampleTime: createTimingStat(),
-    cumulativeTime: createTimingStat()
+    cumulativeTime: createTimingStat(),
   };
 }
 
@@ -143,7 +151,7 @@ function summarizeProfiles(timedProfiles: TimedProfile[]): ProfileStat {
   let cumulativeTime = createTimingStat();
   let functionStats = timedProfiles.reduce((map, timedProfile) => {
     cumulativeTime.data.push(timedProfile.cumulativeTime);
-    timedProfile.functions.forEach(timedFunction => {
+    timedProfile.functions.forEach((timedFunction) => {
       let key = toKey(timedFunction);
       let functionStat = map.get(key);
       if (!functionStat) {
@@ -159,7 +167,7 @@ function summarizeProfiles(timedProfiles: TimedProfile[]): ProfileStat {
   }, new Map<string, FunctionTiming>());
 
   calculateStats(cumulativeTime);
-  functionStats.forEach(functionStat => {
+  functionStats.forEach((functionStat) => {
     calculateStats(functionStat.sampleTime);
     calculateStats(functionStat.cumulativeTime);
   });
@@ -168,7 +176,7 @@ function summarizeProfiles(timedProfiles: TimedProfile[]): ProfileStat {
     cumulativeTime,
     functions: [...functionStats.values()].sort(
       (s1, s2) => s2.cumulativeTime.mean - s1.cumulativeTime.mean
-    )
+    ),
   };
 }
 
@@ -180,8 +188,8 @@ export function generateTiming(
     try {
       let files = readdirSync(directory);
       let timedProfiles = files
-        .filter(filename => filename.endsWith(".cpuprofile"))
-        .map(filename => {
+        .filter((filename) => filename.endsWith(".cpuprofile"))
+        .map((filename) => {
           let profile = JSON.parse(
             readFileSync(join(directory, filename)).toString()
           ) as inspector.Profiler.Profile;

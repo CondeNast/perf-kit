@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 
-export default async function(argv: string[]) {
+export default async function (argv: string[]) {
   switch (argv[0]) {
     case "compare":
       console.log(
