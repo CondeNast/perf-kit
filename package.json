@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "minimist": "^1.2.5",
-    "simple-statistics": "7.4.0",
+    "simple-statistics": "7.7.0",
     "ttest": "3.0.0"
   },
   "husky": {
