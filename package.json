@@ -1,6 +1,6 @@
 {
   "name": "@condenast/perf-kit",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Perf kit is a toolchain for testing performance regressions in JavaScript code.",
   "main": "dist/index.js",
   "private": false,
