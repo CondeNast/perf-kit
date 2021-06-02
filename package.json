@@ -8,7 +8,8 @@
     "build": "tsc",
     "typecheck": "tsc",
     "lint": "eslint src/**/*.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -28,7 +29,7 @@
     "eslint": "7.26.0",
     "eslint-config-prettier": "6.15.0",
     "eslint-plugin-prettier": "3.4.0",
-    "husky": "6.0.0",
+    "husky": "^6.0.0",
     "lint-staged": "11.0.0",
     "prettier": "2.2.1",
     "typescript": "4.2.4"
@@ -38,15 +39,9 @@
     "simple-statistics": "7.7.0",
     "ttest": "3.0.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "{src}/**/*.{ts}": [
-      "npm run lint",
-      "git add"
+      "npm run lint"
     ]
   }
 }
