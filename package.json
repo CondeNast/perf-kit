@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "minimist": "^1.2.5",
-    "simple-statistics": "7.7.5",
+    "simple-statistics": "7.7.6",
     "ttest": "3.0.0"
   },
   "lint-staged": {
