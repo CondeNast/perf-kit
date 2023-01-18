@@ -27,6 +27,6 @@ export async function run<T>(
     }
     process.exit();
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error as string);
   }
 }

@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import ttest from "ttest";
 import { FunctionTiming, ProfileStat, TimingStat } from "./generate-timing";
@@ -116,6 +116,19 @@ function getTStats(
   };
 }
 
+const NULL_TSTAT: ProfileTStat = {
+  cumulativeTimeTStat: {
+    confidenceInterval: [0, 0],
+    tScore: 0,
+    pValue: 1,
+    degreesFreedom: 0,
+    alpha: 1,
+  },
+  functionTStats: [],
+  dropped: [],
+  added: [],
+};
+
 export function generateTStats(
   testDir: string,
   baseline: string,
@@ -124,17 +137,27 @@ export function generateTStats(
   return new Promise<{ filename: string; profileTStat: ProfileTStat }>(
     (resolve, reject) => {
       try {
-        let beforeProfileStat = JSON.parse(
-          readFileSync(join(testDir, baseline, "timing.json")).toString()
-        ) as ProfileStat;
-        let profileStat = JSON.parse(
-          readFileSync(join(testDir, current, "timing.json")).toString()
-        ) as ProfileStat;
+        let baselineTimingPath = join(testDir, baseline, "timing.json");
+        let currentTimingPath = join(testDir, current, "timing.json");
+        if (existsSync(baselineTimingPath) && existsSync(currentTimingPath)) {
+          let beforeProfileStat = JSON.parse(
+            readFileSync(join(testDir, baseline, "timing.json")).toString()
+          ) as ProfileStat;
+          let profileStat = JSON.parse(
+            readFileSync(join(testDir, current, "timing.json")).toString()
+          ) as ProfileStat;
 
-        resolve({
-          filename: `${baseline}-${current}-tStats.json`,
-          profileTStat: getTStats(beforeProfileStat, profileStat),
-        });
+          resolve({
+            filename: `${baseline}-${current}-tStats.json`,
+            profileTStat: getTStats(beforeProfileStat, profileStat),
+          });
+        } else {
+          resolve({
+            filename: `${baseline}-${current}-tStats.json`,
+            profileTStat: NULL_TSTAT,
+          });
+          return;
+        }
       } catch (error) {
         reject(error);
       }
