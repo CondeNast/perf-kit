@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "private": false,
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc && cp -R src/help dist/help",
     "typecheck": "tsc",
     "lint": "eslint src/**/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -29,15 +29,15 @@
     "eslint": "8.22.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-prettier": "4.2.1",
-    "husky": "7.0.4",
+    "husky": "8.0.3",
     "lint-staged": "13.0.3",
     "prettier": "2.8.3",
-    "typescript": "4.3.2"
+    "typescript": "4.9.4"
   },
   "dependencies": {
     "minimist": "^1.2.5",
     "simple-statistics": "7.8.2",
-    "ttest": "3.0.0"
+    "ttest": "4.0.0"
   },
   "lint-staged": {
     "{src}/**/*.{ts}": [
