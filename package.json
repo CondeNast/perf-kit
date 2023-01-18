@@ -40,7 +40,7 @@
     "ttest": "4.0.0"
   },
   "lint-staged": {
-    "{src}/**/*.{ts}": [
+    "src/**/*.ts": [
       "npm run lint"
     ]
   }
