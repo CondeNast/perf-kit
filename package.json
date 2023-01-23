@@ -37,7 +37,7 @@
   "dependencies": {
     "minimist": "^1.2.5",
     "simple-statistics": "7.8.2",
-    "ttest": "3.0.0"
+    "ttest": "4.0.0"
   },
   "lint-staged": {
     "{src}/**/*.{ts}": [
