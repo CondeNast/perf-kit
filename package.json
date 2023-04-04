@@ -23,7 +23,7 @@
   "homepage": "https://github.com/CondeNast/perf-kit#readme",
   "devDependencies": {
     "@types/minimist": "1.2.2",
-    "@types/node": "16.11.55",
+    "@types/node": "16.18.23",
     "@typescript-eslint/eslint-plugin": "5.57.1",
     "@typescript-eslint/parser": "5.57.1",
     "eslint": "8.37.0",
